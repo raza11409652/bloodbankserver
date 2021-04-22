@@ -16,6 +16,9 @@ const bloodRequest = mongoose.Schema({
     quantity: {
         type: String,
         required: true
+    }, status: {
+        type: String,
+        default: null
     }
 });
 module.exports = mongoose.model('bloodRequest', bloodRequest)

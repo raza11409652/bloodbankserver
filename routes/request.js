@@ -48,7 +48,8 @@ router.get('/requested', sessionHandler, async (req, res) => {
                 const item = {
                     name:_data?.name,
                     qty:data[i]?.quantity,
-                    group:_data?.bloodGroup
+                    group:_data?.bloodGroup,
+                    status:data[i].status
                 }
                 records.push(item);
             }).catch(er=>{
@@ -58,6 +59,18 @@ router.get('/requested', sessionHandler, async (req, res) => {
         return res.json({error:false , record:records})
     }).catch(er => {
         return res.json({ error: true, msg: er.message })
+    })
+})
+router.post('/mark' , sessionHandler  ,async(req ,res)=>{
+    const _user = req.user
+    const userId = _user._id
+    const _id = req.body?.id
+    const status = req.body.status
+    
+    bloodRequest.findOneAndUpdate(_id , {status:status}).then(data=>{
+        return res.json({error:false , msg:"Status modified" , data:data})
+    }).catch(er=>{
+        return res.json({error:true , msg:er})
     })
 })
 
