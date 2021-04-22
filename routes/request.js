@@ -37,6 +37,7 @@ router.get('/requested', sessionHandler, async (req, res) => {
     const _user = req.user
     const userId = _user._id
     bloodRequest.find({ requestedTo: userId }).then(async data => {
+        console.log(data);
         // return res.json({ error: false, msg: "Required", record: data })
         var records = [];
         for(let i=0 ; i<data.length ;i++){
@@ -49,7 +50,8 @@ router.get('/requested', sessionHandler, async (req, res) => {
                     name:_data?.name,
                     qty:data[i]?.quantity,
                     group:_data?.bloodGroup,
-                    status:data[i].status
+                    status:data[i].status,
+                    _id:data[i]._id
                 }
                 records.push(item);
             }).catch(er=>{
@@ -66,8 +68,10 @@ router.post('/mark' , sessionHandler  ,async(req ,res)=>{
     const userId = _user._id
     const _id = req.body?.id
     const status = req.body.status
+    console.log(req.body);
     
-    bloodRequest.findOneAndUpdate(_id , {status:status}).then(data=>{
+    bloodRequest.findByIdAndUpdate(_id , {status:status}).then(data=>{
+        console.log(data);
         return res.json({error:false , msg:"Status modified" , data:data})
     }).catch(er=>{
         return res.json({error:true , msg:er})
